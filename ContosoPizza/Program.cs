@@ -9,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<PizzaContext>(options =>
     options.UseSqlite("Data Source=ContosoPizza.db"));
+// Esse código registra a classe PizzaService no contêiner de injeção de dependência.
+// Agora, o PizzaService pode ser injetado em qualquer página Razor.
+builder.Services.AddScoped<PizzaService>();
 
 var app = builder.Build();
 

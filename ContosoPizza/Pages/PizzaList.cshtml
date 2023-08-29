@@ -1,0 +1,101 @@
+﻿
+@page
+@model ContosoPizza.Pages.PizzaListModel
+@{
+    ViewData["Title"] = "Pizza List 🍕";
+}
+
+@* criar página *@
+@* dotnet new page --name PizzaList --namespace ContosoPizza.Pages --output Pages *@
+
+
+
+@* O atributo asp-validation-summary é usado para exibir erros de validação para todo o modelo. *@
+@* Cada campo de formulário (elementos <input> e <select>) e <label> é associado à propriedade NewPizza usando o atributo asp-for. *@
+@* O atributo asp-validation-for é usado para exibir erros de validação para cada campo de formulário. *@
+<form method="post">
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="form-group">
+    <label asp-for="NewPizza.Name" class="control-label"></label>
+    <input asp-for="NewPizza.Name" class="form-control" />
+    <span asp-validation-for="NewPizza.Name" class="text-danger"></span>
+</div>
+<div class="form-group">
+    <label asp-for="NewPizza.Size" class="control-label"></label>
+    <select asp-for="NewPizza.Size" class="form-control" id="PizzaSize">
+        <option value="">-- Select Size --</option>
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+    </select>
+    <span asp-validation-for="NewPizza.Size" class="text-danger"></span>
+</div>
+
+@* O método @Html.DisplayNameFor é usado para exibir o nome de exibição da propriedade IsGlutenFree.  *@
+@* Esse é um método auxiliar Razor usado para mostrar o nome de exibição de uma propriedade. Fazer o rótulo dessa maneira garante que a caixa de seleção seja marcada quando o usuário clicar no rótulo. *@
+<div class="form-group form-check">
+    <label class="form-check-label">
+        <input class="form-check-input" asp-for="NewPizza.IsGlutenFree" /> @Html.DisplayNameFor(model => model.NewPizza.IsGlutenFree)
+    </label>
+</div>
+<div class="form-group">
+    <label asp-for="NewPizza.Price" class="control-label"></label>
+    <input asp-for="NewPizza.Price" class="form-control" />
+    <span asp-validation-for="NewPizza.Price" class="text-danger"></span>
+</div>
+@* No runtime, o navegador enviará uma solicitação HTTP POST para o servidor quando o usuário clicar no botão enviar. *@
+<div class="form-group">
+    <input type="submit" value="Create" class="btn btn-primary" />
+</div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+<table class="table mt-5">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Size</th>
+            <th scope="col">Gluten Free</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    @* A propriedade Model refere-se ao objeto PizzaListModel que foi criado no arquivo code-behind. *@
+    @foreach (var pizza in Model.PizzaList)
+    {
+        <tr>
+            <td>@pizza.Name</td>
+            @* :C format currency *@
+            <td>@($"{pizza.Price:C}")</td>
+            <td>@pizza.Size</td>
+            <td>@(pizza.IsGlutenFree ? "✔️" : string.Empty)</td>
+            @* O atributo asp-page-handler indica que o formulário deve ser enviado ao manipulador Delete no arquivo code-behind. *@
+            @* O atributo asp-route-id indica que a propriedade Id do objeto Pizza deve ser passada para o manipulador Delete. *@
+            <td>
+                <form method="post" asp-page-handler="Delete" asp-route-id="@pizza.Id">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
+
+@* Isso injeta o conteúdo do arquivo _ValidationScriptsPartial.cshtml em uma página.  *@
+@* O arquivo _ValidationScriptsPartial.cshtml contém JavaScript usado para validar a entrada do formulário, portanto, ele precisa ser incluído em cada página que contém um formulário. *@
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}

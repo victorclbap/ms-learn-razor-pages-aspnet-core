@@ -1,10 +1,22 @@
-﻿@page
+﻿@* indica que é uma página razor *@
+@page 
+@* indica o modelo da página *@
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    @* ViewData é usado para passar dados entre a página Razor e a classe IndexModel. *@
+    @* No runtime, o valor Title é usado para definir o elemento <title> da página. *@
+    @* Define o valor do item Title no dicionário ViewData como "A Casa dos Amantes de Pizza". *@
+    ViewData["Title"] = "The Home for Pizza Lovers";
+
+    @* Calcula quanto tempo passou desde que a empresa foi aberta. *@
+    TimeSpan timeInBusiness = DateTime.Now - new DateTime(2018,8,14);
 }
 
+@* O caractere @ é usado para alternar de HTML para sintaxe Razor. *@
+@* O método Convert.ToInt32 é usado para converter a propriedade TotalDays da variável timeInBusiness em um inteiro. *@
+@* A classe Convert faz parte do namespace System, que é importado automaticamente pelo elemento <ImplicitUsings> no arquivo ContosoPizza.csproj. *@
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Welcome to Contoso Pizza</h1>
+    <p class="lead">The best pizza in town for @Convert.ToInt32(timeInBusiness.TotalDays) days!</p>
 </div>
